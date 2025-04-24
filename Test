@@ -9,95 +9,71 @@ private:
     std::string author;
     std::string isbn;
     bool available;
-    
+
 public:
-    // Constructor
+
     Book(std::string t, std::string a, std::string i, bool av) 
         : title(t), author(a), isbn(i), available(av) {}
-    
-    // Getters
+
     std::string getTitle() const { return title; }
     std::string getAuthor() const { return author; }
     std::string getISBN() const { return isbn; }
     bool isAvailable() const { return available; }
-    
-    // Display book details
+
     void displayDetails() const {
-        std::cout << "Title: " << title << "\n"
-                  << "Author: " << author << "\n"
-                  << "ISBN: " << isbn << "\n"
-                  << "Status: " << (available ? "Available" : "Borrowed") 
+        std::cout << " Título: " << title << "\n"
+                  << "  Autor: " << author << "\n"
+                  << " ISBN: " << isbn << "\n"
+                  << " Status: " << (available ? "Disponível" : "Emprestado") 
                   << "\n\n";
     }
 };
 
-// Function to compare books by title for sorting
 bool compareByTitle(const Book &a, const Book &b) {
     return a.getTitle() < b.getTitle();
 }
 
 int main() {
-    // ===== Test Case 1: Correct Initialization =====
-    std::cout << "=== TEST CASE 1: CORRECT INITIALIZATION ===\n";
+    std::cout << " TESTE 1: INICIALIZAÇÃO CORRETA \n";
     Book book1("Freakonomics", "Steven D. Levitt & Stephen J. Dubner", "006073132X", true);
     Book book2("O Andar do Bêbado", "Leonard Mlodinow", "8535916814", false);
     Book book3("A Riqueza das Nações", "Adam Smith", "8572329226", true);
-    
+
     book1.displayDetails();
     book2.displayDetails();
     book3.displayDetails();
-    
-    // ===== Test Case 2: Incorrect Initialization =====
-    std::cout << "=== TEST CASE 2: INCORRECT INITIALIZATION ===\n";
+
+    std::cout << " TESTE 2: INICIALIZAÇÃO INCORRETA\n";
     try {
-        Book invalidBook1("", "Invalid Author", "123ABC", true); // Empty title
-        std::cout << "ERROR: Invalid book created (empty title)\n";
+        Book invalidBook1("", "Autor Genérico", "123ABC", true);
+        std::cout << "⚠ ERRO: Livro inválido criado (título vazio)\n";
     } catch (...) {
-        std::cout << "Caught invalid book (empty title)\n";
+        std::cout << " Capturado livro inválido (título vazio)\n";
     }
-    
+
     try {
-        Book invalidBook2("Valid Title", "", "9781234567890", false); // Empty author
-        std::cout << "ERROR: Invalid book created (empty author)\n";
+        Book invalidBook2("Título Válido", "", "9781234567890", false);
+        std::cout << " ERRO: Livro inválido criado (autor vazio)\n";
     } catch (...) {
-        std::cout << "Caught invalid book (empty author)\n";
+        std::cout << " Capturado livro inválido (autor vazio)\n";
     }
-    
+
     try {
-        Book invalidBook3("Valid Title", "Valid Author", "INVALIDISBN", true); // Invalid ISBN
-        std::cout << "ERROR: Invalid book created (invalid ISBN)\n";
+        Book invalidBook3("Outro Título", "Outro Autor", "INVALIDISBN", true);
+        std::cout << "ERRO: Livro inválido criado (ISBN inválido)\n";
     } catch (...) {
-        std::cout << "Caught invalid book (invalid ISBN)\n";
+        std::cout << " Capturado livro inválido (ISBN inválido)\n";
     }
-    
-    // ===== Test Case 3: Sorting Functionality =====
-    std::cout << "\n=== TEST CASE 3: SORTING FUNCTIONALITY ===\n";
-    
-    // Create arrays with different orders
-    std::vector<Book> ascendingOrder = {book1, book2, book3};
-    std::vector<Book> descendingOrder = {book3, book2, book1};
-    std::vector<Book> mixedOrder = {book2, book1, book3};
-    
-    // Sort each array
-    std::sort(ascendingOrder.begin(), ascendingOrder.end(), compareByTitle);
-    std::sort(descendingOrder.begin(), descendingOrder.end(), compareByTitle);
-    std::sort(mixedOrder.begin(), mixedOrder.end(), compareByTitle);
-    
-    // Display sorted results
-    std::cout << "Sorted Ascending Order:\n";
-    for (const auto &book : ascendingOrder) {
-        std::cout << book.getTitle() << "\n";
+
+    std::cout << "TESTE 3: ORDENANDO OS LIVROS ";
+    std::vector<Book> books = {book2, book1, book3}; // ordem mista
+
+    std::sort(books.begin(), books.end(), compareByTitle);
+
+    std::cout << "Livros ordenados por título:\n";
+    for (const auto &book : books) {
+        std::cout << "- " << book.getTitle() << "\n";
     }
-    
-    std::cout << "\nSorted Descending Order (after sort):\n";
-    for (const auto &book : descendingOrder) {
-        std::cout << book.getTitle() << "\n";
-    }
-    
-    std::cout << "\nSorted Mixed Order:\n";
-    for (const auto &book : mixedOrder) {
-        std::cout << book.getTitle() << "\n";
-    }
-    
+
     return 0;
 }
