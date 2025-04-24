@@ -34,7 +34,7 @@ bool compareByTitle(const Book &a, const Book &b) {
 }
 
 int main() {
-    std::cout << " TESTE 1: INICIALIZAÇÃO CORRETA \n";
+    std::cout << " TESTE 1: Correct book information initialisation\n";
     Book book1("Freakonomics", "Steven D. Levitt & Stephen J. Dubner", "006073132X", true);
     Book book2("O Andar do Bêbado", "Leonard Mlodinow", "8535916814", false);
     Book book3("A Riqueza das Nações", "Adam Smith", "8572329226", true);
@@ -43,7 +43,7 @@ int main() {
     book2.displayDetails();
     book3.displayDetails();
 
-    std::cout << " TESTE 2: INICIALIZAÇÃO INCORRETA\n";
+    std::cout << " TESTE 2: Incorrect book information initialisation\n";
     try {
         Book invalidBook1("", "Autor Genérico", "123ABC", true);
         std::cout << "⚠ ERRO: Livro inválido criado (título vazio)\n";
