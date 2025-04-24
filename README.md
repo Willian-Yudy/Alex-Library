@@ -1,98 +1,88 @@
 #include <iostream>
 #include <string>
-using namespace std;
+#include <vector>
+#include <algorithm>
 
 class Book {
 private:
-    string title;
-    string author;
-    string isbn;
+    std::string title;
+    std::string author;
+    std::string isbn;
     bool available;
 
 public:
-    void setBookDetails(string t, string a, string i, bool avail) {
-        title = t;
-        author = a;
-        isbn = i;
-        available = avail;
-    }
 
-    void displayBookDetails() {
-        cout << "Título: " << title << endl;
-        cout << "Autor: " << author << endl;
-        cout << "ISBN: " << isbn << endl;
-        cout << "Disponibilidade: " << (available ? "Disponível" : "Emprestado") << endl;
-        cout << "---------------------------" << endl;
-    }
+    Book(std::string t, std::string a, std::string i, bool av) 
+        : title(t), author(a), isbn(i), available(av) {}
 
-    bool borrowBook() {
-        if (available) {
-            available = false;
-            return true;
-        }
-        return false;
-    }
+    std::string getTitle() const { return title; }
+    std::string getAuthor() const { return author; }
+    std::string getISBN() const { return isbn; }
+    bool isAvailable() const { return available; }
 
-    void returnBook() {
-        available = true;
-    }
-
-    string getISBN() {
-        return isbn;
-    }
-
-    bool isAvailable() {
-        return available;
+    void displayDetails() const {
+        std::cout << " Título: " << title << "\n"
+                  << "  Autor: " << author << "\n"
+                  << " ISBN: " << isbn << "\n"
+                  << " Status: " << (available ? "Disponível" : "Emprestado") 
+                  << "\n\n";
     }
 };
 
+bool compareByTitle(const Book &a, const Book &b) {
+    return a.getTitle() < b.getTitle();
+}
+
 int main() {
-    Book library[5];
+    std::cout << " TESTE 1: INICIALIZAÇÃO CORRETA \n";
+    Book book1("Freakonomics", "Steven D. Levitt & Stephen J. Dubner", "006073132X", true);
+    Book book2("O Andar do Bêbado", "Leonard Mlodinow", "8535916814", false);
+    Book book3("A Riqueza das Nações", "Adam Smith", "8572329226", true);
 
-    // Inicializando os livros que temos na biblioteca do sistema 
-    library[0].setBookDetails("Freakonomics", "Steven D. Levitt & Stephen J. Dubner", "006073132X", true);
-    library[1].setBookDetails("O Andar do Bêbado", "Leonard Mlodinow", "8535916814", true);
-    library[2].setBookDetails("A Riqueza das Nações", "Adam Smith", "8572329226", true);
-    library[3].setBookDetails("Crash: Uma Breve História da Economia", "Alexandre Versignassi", "8577020487", false); // já emprestado para alguem
-    library[4].setBookDetails("O Capital no Século XXI", "Thomas Piketty", "853591126X", true);
+    book1.displayDetails();
+    book2.displayDetails();
+    book3.displayDetails();
 
-    string inputISBN;
-    cout << "=== Alex's Library ===" << endl;
+    std::cout << " TESTE 2: INICIALIZAÇÃO INCORRETA\n";
+    try {
+        Book invalidBook1("", "Autor Genérico", "123ABC", true);
+        std::cout << "⚠ ERRO: Livro inválido criado (título vazio)\n";
+    } catch (...) {
+        std::cout << " Capturado livro inválido (título vazio)\n";
+    }
 
-    while (true) {
-        cout << "\nLivros disponíveis:\n";
-        for (int i = 0; i < 5; i++) {
-            library[i].displayBookDetails();
-        }
+    try {
+        Book invalidBook2("Título Válido", "", "9781234567890", false);
+        std::cout << " ERRO: Livro inválido criado (autor vazio)\n";
+    } catch (...) {
+        std::cout << " Capturado livro inválido (autor vazio)\n";
+    }
 
-        cout << "Digite o ISBN do livro que deseja emprestar (ou 0 para sair): ";
-        getline(cin, inputISBN);
+    try {
+        Book invalidBook3("Outro Título", "Outro Autor", "INVALIDISBN", true);
+        std::cout << "ERRO: Livro inválido criado (ISBN inválido)\n";
+    } catch (...) {
+        std::cout << " Capturado livro inválido (ISBN inválido)\n";
+    }
 
-        if (inputISBN == "0") {
-            cout << " Sistema encerrado. Até a próxima!" << endl;
-            break;
-        }
+    std::cout << "TESTE 3: ORDENANDO OS LIVROS ";
+    std::vector<Book> books = {book2, book1, book3}; // ordem mista
 
-        bool found = false;
-        for (int i = 0; i < 5; i++) {
-            if (library[i].getISBN() == inputISBN) {
-                found = true;
-                if (library[i].isAvailable()) {
-                    library[i].borrowBook();
-                    cout << "✅ Livro emprestado com sucesso!" << endl;
-                }
-                else {
-                    cout << "❌ Este livro já está emprestado." << endl;
-                }
-                break;
-            }
-        }
+    std::sort(books.begin(), books.end(), compareByTitle);
 
-        if (!found) {
-            cout << "❌ Livro com ISBN " << inputISBN << " não encontrado." << endl;
-        }
+    std::cout << "Livros ordenados por título:\n";
+    for (const auto &book : books) {
+        std::cout << "- " << book.getTitle() << "\n";
     }
 
     return 0;
 }
+
+
+
+
+
+
+
+
 
